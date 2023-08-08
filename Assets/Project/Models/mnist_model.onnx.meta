@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+guid: 79e598e27732ad44aa187628df904f90
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 818526489, guid: eda3be013924648929040646fbdc8fb3, type: 3}
+  optimizeModel: 1
+  denormalWeightsRounding: 1

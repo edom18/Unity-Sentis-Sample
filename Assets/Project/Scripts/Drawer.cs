@@ -5,9 +5,14 @@ public class Drawer : MonoBehaviour
 {
     [SerializeField] private ComputeShader _shader;
     [SerializeField] private RawImage _preview;
+    [SerializeField] private RawImage _mnistPreview;
+    [SerializeField] private Button _clearButton;
+    [SerializeField] private Button _checkButton;
     [SerializeField] private float _size = 5f;
+    [SerializeField] private Mnist _mnist;
 
     private RenderTexture _renderTexture;
+    private RenderTexture _mnistTexture;
 
     private int _kernelId;
 
@@ -16,9 +21,17 @@ public class Drawer : MonoBehaviour
         CreateRenderTexture();
 
         _preview.texture = _renderTexture;
+        _mnistPreview.texture = _mnistTexture;
 
         _kernelId = _shader.FindKernel("CSMain");
         _shader.SetTexture(_kernelId, "_Texture", _renderTexture);
+
+        _clearButton.onClick.AddListener(() =>
+        {
+            Clear(_renderTexture);
+        });
+        
+        _checkButton.onClick.AddListener(Infer);
     }
 
     private void Update()
@@ -35,12 +48,27 @@ public class Drawer : MonoBehaviour
         _renderTexture.enableRandomWrite = true;
         _renderTexture.Create();
 
+        Clear(_renderTexture);
+
+        _mnistTexture = new RenderTexture(28, 28, 1);
+        _mnistTexture.enableRandomWrite = true;
+        _mnistTexture.Create();
+    }
+
+    private void Clear(RenderTexture texture)
+    {
         RenderTexture backup = RenderTexture.active;
-        RenderTexture.active = _renderTexture;
+        RenderTexture.active = texture;
         GL.PushMatrix();
-        GL.Clear(true, true, Color.white);
+        GL.Clear(true, true, Color.black);
         GL.PopMatrix();
         RenderTexture.active = backup;
+    }
+
+    private void Infer()
+    {
+        Graphics.Blit(_renderTexture, _mnistTexture);
+        _mnist.Execute(_mnistTexture);
     }
 
     private void TryDraw()

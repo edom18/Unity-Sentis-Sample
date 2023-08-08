@@ -11,6 +11,6 @@ void CSMain(uint3 id : SV_DispatchThreadID)
 
     if (len < _Size)
     {
-        _Texture[id.xy] = float4(0, 0, 0, 1);
+        _Texture[id.xy] = float4(1, 1, 1, 1);
     }
 }
