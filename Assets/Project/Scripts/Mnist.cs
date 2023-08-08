@@ -1,9 +1,11 @@
 using Unity.Sentis;
 using UnityEngine;
+using TMPro;
 
 public class Mnist : MonoBehaviour
 {
     [SerializeField] private ModelAsset _modelAsset;
+    [SerializeField] private TMP_Text _result;
 
     private static readonly int s_width = 28;
     private static readonly int s_height = 28;
@@ -33,6 +35,9 @@ public class Mnist : MonoBehaviour
 
         float[] results = outputTensor.ToReadOnlyArray();
         int number = Inference(results);
+
+        _result.text = number.ToString();
+        
         Debug.Log($"Result: {number.ToString()}");
     }
 
